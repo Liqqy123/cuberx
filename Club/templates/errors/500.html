@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Ошибка сервера - 500{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-template">
+                <h1 class="display-1 text-muted">500</h1>
+                <h2 class="mb-4">Внутренняя ошибка сервера</h2>
+                <div class="error-details mb-4">
+                    <p class="lead">Что-то пошло не так на нашей стороне.</p>
+                    <p>Мы уже работаем над устранением проблемы. Пожалуйста, попробуйте позже.</p>
+                </div>
+                <div class="error-actions">
+                    <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home"></i> На главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

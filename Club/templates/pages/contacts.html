@@ -1,0 +1,543 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Контакты - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero секция */
+    .contacts-hero {
+        background:
+            radial-gradient(circle at 14% 18%, rgba(220,38,38,0.18), transparent 18%),
+            radial-gradient(circle at 84% 14%, rgba(255,255,255,0.06), transparent 10%),
+            linear-gradient(135deg, #030303 0%, #0b0303 42%, #180909 58%, #250b0b 100%);
+        padding: 60px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 50px;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .contacts-hero::before,
+    .contacts-hero::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: driftGlow 17s ease-in-out infinite;
+    }
+
+    .contacts-hero::before {
+        width: 520px;
+        height: 520px;
+        left: -180px;
+        bottom: -260px;
+        background: radial-gradient(circle, rgba(220,38,38,0.12), transparent 67%);
+    }
+
+    .contacts-hero::after {
+        width: 320px;
+        height: 320px;
+        right: 4%;
+        top: 8%;
+        background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 68%);
+        animation-duration: 10s;
+    }
+
+    .contacts-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Контактная информация */
+    .contact-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .info-card {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+        border-radius: 20px;
+        padding: 25px;
+        transition: all 0.3s;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(220,38,38,0.3);
+        box-shadow: 0 10px 30px rgba(220,38,38,0.1);
+    }
+    
+    .info-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(220,38,38,0.15);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #dc2626;
+        font-size: 1.5rem;
+    }
+    
+    .info-content h4 {
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+    }
+    
+    .info-content p {
+        color: #aaa;
+        margin-bottom: 0;
+    }
+    
+    .info-content a {
+        color: #aaa;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .info-content a:hover {
+        color: #dc2626;
+    }
+    
+    /* Карта и схема проезда */
+    .map-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+    
+    .map-card {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+        transition: all 0.3s;
+    }
+    
+    .map-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(220,38,38,0.3);
+    }
+    
+    .map-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .map-header h3 {
+        margin-bottom: 5px;
+        color: #dc2626;
+    }
+    
+    .map-container {
+        height: 300px;
+        background: #0a0a0a;
+    }
+    
+    .map-placeholder {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    }
+    
+    /* Режим работы */
+    .schedule-section {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+    }
+    
+    .schedule-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .schedule-title h3 {
+        color: #dc2626;
+    }
+    
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .schedule-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 20px;
+        background: #0a0a0a;
+        border-radius: 12px;
+    }
+    
+    .schedule-day {
+        font-weight: bold;
+    }
+    
+    .schedule-time {
+        color: #dc2626;
+    }
+    
+    /* Форма обратной связи */
+    .feedback-section {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.04), transparent 32%);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+    }
+    
+    .feedback-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .feedback-title h3 {
+        color: #dc2626;
+        margin-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 15px;
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        color: white;
+        transition: all 0.3s;
+    }
+    
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #dc2626;
+    }
+    
+    textarea.form-control-custom {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .submit-btn {
+        background: #dc2626;
+        border: none;
+        padding: 14px 35px;
+        border-radius: 30px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+    }
+    
+    .submit-btn:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+    }
+    
+    /* Социальные сети */
+    .social-section {
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .social-section::before {
+        content: '💬';
+        position: absolute;
+        font-size: 100px;
+        opacity: 0.1;
+        right: -20px;
+        bottom: -30px;
+    }
+    
+    .social-title {
+        margin-bottom: 25px;
+    }
+    
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+        transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+        background: white;
+        color: #dc2626;
+        transform: translateY(-3px) scale(1.1);
+    }
+    
+    @media (max-width: 992px) {
+        .contact-info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .map-section {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .schedule-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .info-card {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero секция -->
+<div class="contacts-hero">
+    <div class="container">
+        <div class="section-badge">📞 СВЯЖИТЕСЬ С НАМИ 📞</div>
+        <h1 class="display-3 fw-bold mb-3">КОНТАКТЫ</h1>
+        <p class="lead mb-4">{{ club.description|default:'Мы всегда на связи и готовы ответить на ваши вопросы' }}</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Контактная информация -->
+    <div class="contact-info-grid">
+        <div class="info-card">
+            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="info-content">
+                <h4>АДРЕС</h4>
+                <p>{{ club.address|default:'г. Белореченск, ул. Мира, 164' }}</p>
+                <p class="small text-muted">Центральный вход, 2 этаж</p>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+            <div class="info-content">
+                <h4>ТЕЛЕФОН</h4>
+                <p><a href="tel:{{ club.phone|default:'+79182164164' }}">{{ club.phone|default:'+7 (918) 216-41-64' }}</a></p>
+                <p class="small text-muted">Бронирование и консультации</p>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <div class="info-icon"><i class="fas fa-envelope"></i></div>
+            <div class="info-content">
+                <h4>EMAIL</h4>
+                <p><a href="mailto:{{ club.email|default:'info@cyberx.ru' }}">{{ club.email|default:'info@cyberx.ru' }}</a></p>
+                <p class="small text-muted">Общие вопросы</p>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <div class="info-icon"><i class="fas fa-headset"></i></div>
+            <div class="info-content">
+                <h4>ПОДДЕРЖКА</h4>
+                <p><a href="mailto:support@cyberx.ru">support@cyberx.ru</a></p>
+                <p class="small text-muted">Технические вопросы</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Карта и схема проезда -->
+    <div class="map-section">
+        <div class="map-card">
+            <div class="map-header">
+                <h3><i class="fas fa-map"></i> Схема проезда</h3>
+                <p class="small text-muted">Как добраться до CyberX</p>
+            </div>
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <i class="fas fa-route fa-3x mb-3" style="color: #dc2626;"></i>
+                    <p><strong>{{ club.address|default:'г. Белореченск, ул. Мира, 164' }}</strong></p>
+                    <div class="directions mt-3 text-start" style="max-width: 300px;">
+                        <p><i class="fas fa-car" style="color: #dc2626;"></i> <strong>На автомобиле:</strong> Парковка за зданием, 50 м</p>
+                        <p><i class="fas fa-bus" style="color: #dc2626;"></i> <strong>Общественным транспортом:</strong> Остановка "Улица Мира" (маршруты №2, №5, №12)</p>
+                        <p><i class="fas fa-walking" style="color: #dc2626;"></i> <strong>От остановки:</strong> 3 минуты пешком</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-card">
+            <div class="map-header">
+                <h3><i class="fas fa-location-dot"></i> На карте</h3>
+                <p class="small text-muted">Открыть в навигаторе</p>
+            </div>
+            <div class="map-container">
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: #dc2626;"></i>
+                    <p><strong>{{ club.name|default:'CyberX' }} — {{ club.slogan|default:'Киберспортивный клуб' }}</strong></p>
+                    <a href="https://yandex.ru/maps/?text=Белореченск+ул.Мира+164" target="_blank" class="btn btn-outline-danger mt-3">
+                        <i class="fas fa-external-link-alt"></i> Открыть на Яндекс.Картах
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Режим работы -->
+    <div class="schedule-section">
+        <div class="schedule-title">
+            <h3><i class="fas fa-clock"></i> РЕЖИМ РАБОТЫ</h3>
+            <p class="text-muted">Мы работаем для вас круглосуточно</p>
+        </div>
+        <div class="schedule-grid">
+            <div class="schedule-item">
+                <span class="schedule-day">Понедельник - Пятница</span>
+                <span class="schedule-time">24/7</span>
+            </div>
+            <div class="schedule-item">
+                <span class="schedule-day">Суббота - Воскресенье</span>
+                <span class="schedule-time">24/7</span>
+            </div>
+            <div class="schedule-item">
+                <span class="schedule-day">Праздничные дни</span>
+                <span class="schedule-time">24/7</span>
+            </div>
+            <div class="schedule-item">
+                <span class="schedule-day">Администратор</span>
+                <span class="schedule-time">Круглосуточно</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Форма обратной связи -->
+    <div class="feedback-section">
+        <div class="feedback-title">
+            <h3><i class="fas fa-paper-plane"></i> НАПИШИТЕ НАМ</h3>
+            <p class="text-muted">Заполните форму и мы свяжемся с вами в ближайшее время</p>
+        </div>
+        <form id="feedbackForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control-custom" placeholder="Ваше имя" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="email" class="form-control-custom" placeholder="Email" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="tel" class="form-control-custom" placeholder="Телефон">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control-custom" placeholder="Тема сообщения">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <textarea class="form-control-custom" placeholder="Ваше сообщение..." required></textarea>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Отправить сообщение
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+
+
+<script>
+    // Обработка отправки формы
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Уведомление об отправке
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #dc2626;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        `;
+        notification.innerHTML = `<i class="fas fa-check-circle"></i> Сообщение отправлено! Мы свяжемся с вами.`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+        
+        this.reset();
+    });
+    
+    // Анимации
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Редактирование профиля - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .edit-form {
+        background: #1a1a1a;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        margin: 50px auto;
+        border: 1px solid rgba(220,38,38,0.2);
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #aaa;
+        font-weight: 500;
+    }
+    
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 15px;
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        color: white;
+        transition: all 0.3s;
+    }
+    
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #dc2626;
+    }
+    
+    .btn-save {
+        background: #dc2626;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+    }
+    
+    .btn-save:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+    }
+    
+    .btn-cancel {
+        background: transparent;
+        border: 1px solid #dc2626;
+        padding: 12px 30px;
+        border-radius: 30px;
+        color: #dc2626;
+        text-decoration: none;
+        text-align: center;
+        display: block;
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+    
+    .btn-cancel:hover {
+        background: #dc2626;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post" class="edit-form">
+        {% csrf_token %}
+        <h2 class="text-center mb-4">Редактирование профиля</h2>
+        
+        <div class="form-group">
+            <label class="form-label"><i class="fas fa-user"></i> Логин</label>
+            <input type="text" class="form-control-custom" value="{{ user.username }}" disabled>
+            <small class="text-muted">Логин нельзя изменить</small>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+            <input type="email" name="email" class="form-control-custom" value="{{ user.email }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label"><i class="fas fa-phone"></i> Телефон</label>
+            <input type="tel" name="phone" class="form-control-custom" value="{{ user.phone|default:'' }}" placeholder="8(999)123-45-67">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label"><i class="fas fa-user-tag"></i> Имя</label>
+            <input type="text" name="first_name" class="form-control-custom" value="{{ user.first_name|default:'' }}" placeholder="Ваше имя">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label"><i class="fas fa-user-tag"></i> Фамилия</label>
+            <input type="text" name="last_name" class="form-control-custom" value="{{ user.last_name|default:'' }}" placeholder="Ваша фамилия">
+        </div>
+        
+        <button type="submit" class="btn-save">Сохранить изменения</button>
+        <a href="{% url 'users:profile' %}" class="btn-cancel">Отмена</a>
+    </form>
+</div>
+{% endblock %}

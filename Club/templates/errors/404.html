@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Страница не найдена - 404{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-template">
+                <h1 class="display-1 text-muted">404</h1>
+                <h2 class="mb-4">Страница не найдена</h2>
+                <div class="error-details mb-4">
+                    <p class="lead">Извините, запрашиваемая страница не существует.</p>
+                    <p>Проверьте правильность URL-адреса или вернитесь на главную.</p>
+                </div>
+                <div class="error-actions">
+                    <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home"></i> На главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

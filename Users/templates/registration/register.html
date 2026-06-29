@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-hero {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+        padding: 40px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .auth-card {
+        background: #1a1a1a;
+        border-radius: 20px;
+        border: 1px solid rgba(220,38,38,0.2);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .auth-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(220,38,38,0.15);
+    }
+    
+    .auth-header {
+        background: linear-gradient(135deg, #1a1a1a, #221515);
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid rgba(220,38,38,0.3);
+    }
+    
+    .auth-header h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #dc2626;
+        margin-bottom: 5px;
+    }
+    
+    .auth-header p {
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+    
+    .auth-body {
+        padding: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #ddd;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .form-label i {
+        color: #dc2626;
+        margin-right: 8px;
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 15px;
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #dc2626;
+        box-shadow: 0 0 5px rgba(220,38,38,0.3);
+    }
+    
+    .form-control-custom.error {
+        border-color: #ff6b6b;
+    }
+    
+    .error-text {
+        color: #ff6b6b;
+        font-size: 0.75rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .help-text {
+        color: #aaa;
+        font-size: 0.7rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .btn-auth {
+        width: 100%;
+        background: #dc2626;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+    
+    .btn-auth:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220,38,38,0.4);
+    }
+    
+    .auth-footer {
+        text-align: center;
+        padding: 20px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        color: #aaa;
+    }
+    
+    .auth-footer a {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+    
+    .auth-footer a:hover {
+        color: #ef4444;
+        text-decoration: underline;
+    }
+    
+    /* Phone input group */
+    .phone-group {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .phone-code {
+        width: 100px;
+    }
+    
+    /* Password requirements */
+    .password-requirements {
+        background: #0a0a0a;
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 10px;
+        border-left: 3px solid #dc2626;
+    }
+    
+    .password-requirements p {
+        font-size: 0.75rem;
+        margin: 5px 0;
+        color: #aaa;
+    }
+    
+    .password-requirements i {
+        margin-right: 5px;
+    }
+    
+    .password-requirements .valid {
+        color: #4ecdc4;
+    }
+    
+    .password-requirements .invalid {
+        color: #ff6b6b;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-hero">
+    <div class="container">
+        <div class="section-badge">🎮 СТАНЬ ЧАСТЬЮ КОМАНДЫ</div>
+        <h1 class="display-4 fw-bold mb-3">РЕГИСТРАЦИЯ</h1>
+        <p class="lead">Создайте аккаунт CyberX</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <i class="fas fa-user-plus fa-3x mb-2" style="color: #dc2626;"></i>
+                    <h3>СОЗДАТЬ АККАУНТ</h3>
+                    <p>Заполните форму для регистрации</p>
+                </div>
+                
+                <div class="auth-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i> Логин
+                            </label>
+                            <input type="text" name="username" class="form-control-custom {% if form.username.errors %}error{% endif %}" 
+                                   placeholder="Введите логин (только латиница и цифры)" value="{{ form.username.value|default:'' }}" required>
+                            {% for error in form.username.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Обязательное поле. Только буквы, цифры. Минимум 6 символов.</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i> Телефон
+                            </label>
+                            <div class="phone-group">
+                                <select name="country_code" class="form-control-custom phone-code">
+                                    <option value="+7">+7 (Россия)</option>
+                                    <option value="+1">+1 (США)</option>
+                                    <option value="+44">+44 (Великобритания)</option>
+                                    <option value="+49">+49 (Германия)</option>
+                                </select>
+                                <input type="text" name="phone_number" class="form-control-custom {% if form.phone.errors %}error{% endif %}" 
+                                       placeholder="9991234567" maxlength="10" value="{{ form.phone.value|default:'' }}">
+                            </div>
+                            {% for error in form.phone.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Введите 10 цифр номера без кода страны</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" name="email" class="form-control-custom {% if form.email.errors %}error{% endif %}" 
+                                   placeholder="example@mail.ru" value="{{ form.email.value|default:'' }}" required>
+                            {% for error in form.email.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Введите корректный email адрес</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i> Пароль
+                            </label>
+                            <input type="password" name="password1" class="form-control-custom {% if form.password1.errors %}error{% endif %}" 
+                                   id="id_password1" placeholder="Придумайте пароль (не менее 8 символов)" required>
+                            {% for error in form.password1.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            
+                            <div class="password-requirements" id="passwordHelp">
+                                <p><i class="fas fa-shield-alt"></i> Требования к паролю:</p>
+                                <p id="length-req">🔒 Не менее 8 символов</p>
+                                <p id="letter-req">🔒 Не должен состоять только из цифр</p>
+                                <p id="common-req">🔒 Не должен быть слишком простым</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i> Подтверждение пароля
+                            </label>
+                            <input type="password" name="password2" class="form-control-custom {% if form.password2.errors %}error{% endif %}" 
+                                   placeholder="Повторите пароль" required>
+                            {% for error in form.password2.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Для подтверждения введите, пожалуйста, пароль ещё раз</span>
+                        </div>
+                        
+                        <button type="submit" class="btn-auth">
+                            <i class="fas fa-user-plus me-2"></i> Зарегистрироваться
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>Уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Live password validation
+    const passwordInput = document.getElementById('id_password1');
+    const lengthReq = document.getElementById('length-req');
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const value = this.value;
+            
+            // Check length
+            if (value.length >= 8) {
+                lengthReq.innerHTML = '✅ Не менее 8 символов';
+                lengthReq.className = 'valid';
+            } else {
+                lengthReq.innerHTML = '❌ Не менее 8 символов';
+                lengthReq.className = 'invalid';
+            }
+        });
+    }
+</script>
+{% endblock %}

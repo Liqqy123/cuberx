@@ -1,0 +1,221 @@
+{% load static %}
+
+<footer class="footer">
+    <div class="container">
+        <!-- Верхняя часть с логотипом -->
+        <div class="footer-top mb-4 pb-3">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="d-flex align-items-center">
+                        <div class="ms-3">
+                             <img src="{% static 'images/logo-small.svg' %}" alt="CuberX" height="50" class="me-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="copyright-text small text-muted">
+                        © 2017-2026 ООО «CuberX»<br>
+                        ОГРН 1182375044697 / ИНН 2368010296
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-links mb-4 py-3 border-top border-bottom border-secondary">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav justify-content-center flex-wrap gap-4">
+                           <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="fas fa-home"></i> Главная
+                    </a>
+                </li>
+                        <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hall_map' %}">
+                        <i class="fas fa-map"></i> Карта зала
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tournaments' %}">
+                        <i class="fas fa-trophy"></i> Турниры
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'services' %}">
+                        <i class="fas fa-headphones"></i> Услуги
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contacts' %}">
+                        <i class="fas fa-envelope"></i> Контакты
+                    </a>
+                </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-apps mb-4 py-3">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav justify-content-center flex-wrap gap-3">
+                        <li>
+                            <a href="https://play.google.com/store/apps/details?id=ru.langame.cyberx&pcampaignid=web_share" class="app-store-link" target="_blank">
+                                <i class="fab fa-google-play me-1"></i> Google Play
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://apps.apple.com/us/app/cyberx/id6504088566" class="app-store-link" target="_blank">
+                                <i class="fab fa-apple me-1"></i> App Store
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.rustore.ru/catalog/app/ru.langame.cyberx" class="app-store-link" target="_blank">
+                                <i class="fas fa-mobile-alt me-1"></i> RuStore
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Документы и политики -->
+        <div class="footer-docs pt-3">
+            <div class="row">
+                <div class="col-12">
+                    <div class="docs-links text-center">
+                        <a href="#" class="small text-muted text-decoration-none">Политика обработки персональных данных</a>
+                        <span class="text-muted mx-2">•</span>
+                        <a href="#" class="small text-muted text-decoration-none">Согласие на рассылку</a>
+                        <span class="text-muted mx-2">•</span>
+                        <a href="#" class="small text-muted text-decoration-none">Согласие на обработку персональных данных</a>
+                        <span class="text-muted mx-2">•</span>
+                        <a href="#" class="small text-muted text-decoration-none">Лицензионное соглашение (Оферта)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        background: #0a0a0a;
+        padding: 40px 0 30px;
+        margin-top: 60px;
+        border-top: 1px solid rgba(220, 38, 38, 0.2);
+    }
+    
+    .footer-links .nav-link {
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        padding: 8px 12px;
+    }
+    
+    .footer-links .nav-link:hover {
+        color: #dc2626;
+        transform: translateY(-2px);
+    }
+    
+    .app-store-link {
+        color: #aaa;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s;
+        padding: 5px 10px;
+        display: inline-block;
+    }
+    
+    .app-store-link:hover {
+        color: #dc2626;
+        transform: translateY(-2px);
+    }
+    
+    .docs-links a {
+        color: #6c757d;
+        font-size: 0.7rem;
+        transition: color 0.3s;
+    }
+    
+    .docs-links a:hover {
+        color: #dc2626;
+    }
+    
+    .copyright-text {
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+    
+    .border-secondary {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    @media (max-width: 768px) {
+        .footer-links .nav {
+            flex-direction: column;
+            align-items: center;
+            gap: 5px !important;
+        }
+        
+        .footer-links .nav-link {
+            padding: 5px;
+        }
+        
+        .docs-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .docs-links .text-muted {
+            display: none;
+        }
+        
+        .docs-links a {
+            display: block;
+        }
+        
+        .footer-apps ul {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px !important;
+        }
+        
+        .text-md-end {
+            text-align: center !important;
+            margin-top: 15px;
+        }
+        
+        .footer-top {
+            text-align: center;
+        }
+        
+        .footer-top .d-flex {
+            justify-content: center;
+        }
+    }
+    
+    /* Адаптация для мобильных устройств */
+    @media (max-width: 480px) {
+        .footer-links .nav {
+            gap: 2px !important;
+        }
+        
+        .footer-links .nav-link {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+        }
+        
+        .app-store-link {
+            font-size: 0.75rem;
+        }
+        
+        .docs-links a {
+            font-size: 0.6rem;
+        }
+    }
+</style>

@@ -1,0 +1,761 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Услуги - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .services-hero {
+        background:
+            radial-gradient(circle at 14% 18%, rgba(220,38,38,0.18), transparent 18%),
+            radial-gradient(circle at 84% 14%, rgba(255,255,255,0.06), transparent 10%),
+            linear-gradient(135deg, #030303 0%, #0b0303 42%, #180909 58%, #250b0b 100%);
+        padding: 70px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .services-hero::before,
+    .services-hero::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: driftGlow 16s ease-in-out infinite;
+    }
+
+    .services-hero::before {
+        width: 520px;
+        height: 520px;
+        left: -180px;
+        bottom: -260px;
+        background: radial-gradient(circle, rgba(220,38,38,0.12), transparent 67%);
+    }
+
+    .services-hero::after {
+        width: 320px;
+        height: 320px;
+        right: 4%;
+        top: 8%;
+        background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 68%);
+        animation-duration: 10s;
+    }
+
+    @keyframes driftGlow {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-18px) scale(1.04); }
+    }
+
+    .services-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+    .services-categories {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 0 0 34px;
+        padding-top: 8px;
+    }
+    .category-btn {
+        background: #171717;
+        border: 1px solid rgba(255,255,255,.08);
+        color: #bdbdbd;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-weight: 600;
+        transition: all .2s ease;
+    }
+    .category-btn.active,
+    .category-btn:hover {
+        background: linear-gradient(90deg, #dc2626, #b91c1c);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 8px 20px rgba(220,38,38,.22);
+    }
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 22px;
+    }
+    .service-card {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+        transition: transform .2s ease, border-color .2s ease;
+    }
+    .service-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(220,38,38,.3);
+    }
+    .service-image {
+        height: 180px;
+        background: linear-gradient(135deg, #2a1515, #1a1a1a);
+        position: relative;
+        overflow: hidden;
+    }
+    .service-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .service-image::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.22));
+        pointer-events: none;
+    }
+    .service-badge {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        color: #111;
+        font-size: .78rem;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        padding: 8px 12px;
+        border-radius: 999px;
+        box-shadow: 0 8px 18px rgba(245, 158, 11, .24);
+        z-index: 2;
+    }
+    .service-badge::before {
+        content: '★';
+        font-size: .75rem;
+    }
+    .service-content {
+        padding: 18px;
+    }
+    .service-icon {
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #dc2626;
+        background: rgba(220,38,38,.12);
+        border-radius: 14px;
+        margin-bottom: 14px;
+        font-size: 1rem;
+    }
+    .service-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .service-desc {
+        color: #aaa;
+        font-size: .9rem;
+        min-height: 48px;
+        line-height: 1.5;
+    }
+    .service-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .price-amount {
+        color: #dc2626;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+    .add-to-cart {
+        background: transparent;
+        border: 1px solid #dc2626;
+        color: #dc2626;
+        border-radius: 999px;
+        padding: 9px 18px;
+        font-weight: 700;
+        transition: all .2s ease;
+    }
+    .add-to-cart:hover {
+        background: #dc2626;
+        color: white;
+        box-shadow: 0 8px 18px rgba(220,38,38,.18);
+    }
+
+    .cart-panel {
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+        border-radius: 22px;
+        padding: 22px;
+        position: sticky;
+        top: 24px;
+        z-index: 5;
+        align-self: flex-start;
+        border: 1px solid rgba(255,255,255,.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.35);
+    }
+    .cart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        font-weight: 800;
+        color: #fff;
+    }
+    .cart-header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(220,38,38,.1);
+        color: #fca5a5;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: .8rem;
+        font-weight: 700;
+    }
+    .cart-empty {
+        background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+        border: 1px dashed rgba(255,255,255,.1);
+        border-radius: 16px;
+        padding: 18px 14px;
+        color: #9a9a9a;
+        text-align: center;
+        font-size: .95rem;
+    }
+    .cart-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 320px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(90deg, #0f0f0f 0%, #151515 100%);
+        border: 1px solid rgba(255,255,255,.06);
+        border-radius: 14px;
+        padding: 12px;
+    }
+    .cart-item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+    .cart-item-name {
+        font-weight: 700;
+        font-size: .92rem;
+    }
+    .cart-item-price {
+        color: #fca5a5;
+        font-size: .85rem;
+    }
+    .cart-item-remove {
+        background: transparent;
+        border: 0;
+        color: #9a9a9a;
+        font-size: .95rem;
+        transition: color .2s ease;
+    }
+    .cart-item-remove:hover {
+        color: #fff;
+    }
+    .cart-total {
+        background: rgba(220,38,38,.06);
+        border: 1px solid rgba(220,38,38,.12);
+        border-radius: 16px;
+        padding: 14px;
+        margin-top: 14px;
+    }
+    .cart-total-row {
+        display: flex;
+        justify-content: space-between;
+        color: #d5d5d5;
+        font-size: .92rem;
+    }
+    .cart-total-row.total {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,.08);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .checkout-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #dc2626, #b91c1c);
+        border: 0;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-weight: 800;
+        color: white;
+        margin-top: 14px;
+        box-shadow: 0 10px 24px rgba(220,38,38,.22);
+    }
+    .payment-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.78);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 3000;
+        padding: 20px;
+        backdrop-filter: blur(6px);
+    }
+    .payment-modal-overlay.open {
+        display: flex;
+        animation: fadeIn .25s ease;
+    }
+    .payment-modal {
+        width: min(560px, 100%);
+        background: linear-gradient(180deg, #111111, #1a0a0a);
+        border-radius: 22px;
+        border: 1px solid rgba(220,38,38,.18);
+        padding: 26px;
+        position: relative;
+        box-shadow: 0 18px 50px rgba(0,0,0,.6);
+        transform: translateY(18px) scale(.98);
+        animation: modalSlide .3s ease forwards;
+    }
+    .payment-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: 0;
+        color: #aaa;
+        font-size: 1rem;
+    }
+    .payment-modal-header { text-align: center; margin-bottom: 18px; }
+    .payment-modal-header h3 { margin-top: 10px; color: #fff; }
+    .payment-summary {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .payment-summary div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255,255,255,.04);
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: #aaa;
+        font-size: .9rem;
+    }
+    .payment-summary strong { color: #fff; }
+    .payment-methods {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    .payment-method {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(90deg, #0f0f0f, #171717);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 16px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+    .payment-method:hover { border-color: rgba(220,38,38,.35); transform: translateY(-1px); }
+    .payment-method input { accent-color: #dc2626; }
+    .payment-method.active {
+        border-color: #dc2626;
+        background: linear-gradient(90deg, rgba(220,38,38,.08), rgba(17,17,17,.95));
+        box-shadow: inset 0 0 0 1px rgba(220,38,38,.08);
+    }
+    .payment-method-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: rgba(220,38,38,.08);
+        color: #dc2626;
+        font-size: 1rem;
+    }
+    .payment-method-label { display: flex; flex-direction: column; }
+    .payment-method-label strong { color: #fff; font-size: .95rem; }
+    .payment-method-label span { color: #aaa; font-size: .8rem; }
+    .payment-card-preview {
+        margin-bottom: 18px;
+        background: linear-gradient(135deg, #1a0a0a, #2b0a0a);
+        border-radius: 18px;
+        padding: 18px;
+        border: 1px solid rgba(220,38,38,.18);
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .payment-card-preview::before {
+        content: '';
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba(220,38,38,.18), transparent 70%);
+        top: -30px;
+        right: -20px;
+    }
+    .payment-card-preview.small-preview {
+        align-items: center;
+        text-align: center;
+    }
+    .payment-card-preview.qr-preview {
+        background: linear-gradient(135deg, #130909, #1c1616);
+    }
+    .payment-card-preview small { color: #aaa; }
+    .payment-card-preview .card-number { font-size: 1.4rem; letter-spacing: .18em; color: #fff; }
+    .payment-card-preview .qr-box {
+        width: 140px;
+        height: 140px;
+        margin: 0 auto;
+        background:
+            linear-gradient(90deg, #fff 0%, #fff 10%, transparent 10%, transparent 20%, #fff 20%, #fff 30%, transparent 30%, transparent 40%, #fff 40%, #fff 50%, transparent 50%, transparent 60%, #fff 60%, #fff 70%, transparent 70%, transparent 80%, #fff 80%, #fff 90%, transparent 90%, transparent 100%),
+            linear-gradient(0deg, #fff 0%, #fff 10%, transparent 10%, transparent 20%, #fff 20%, #fff 30%, transparent 30%, transparent 40%, #fff 40%, #fff 50%, transparent 50%, transparent 60%, #fff 60%, #fff 70%, transparent 70%, transparent 80%, #fff 80%, #fff 90%, transparent 90%, transparent 100%);
+        background-size: 16px 16px;
+        border-radius: 12px;
+        position: relative;
+    }
+    .payment-card-preview .qr-box::after {
+        content: '';
+        position: absolute;
+        inset: 18px;
+        background: #111;
+        border-radius: 8px;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes modalSlide { to { transform: translateY(0) scale(1); } }
+    .subscription-banner {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        border-radius: 18px;
+        padding: 32px;
+        text-align: center;
+        margin-top: 30px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 18px 36px rgba(220,38,38,.22);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="services-hero">
+    <div class="container">
+        <div class="section-badge">💎 ПРЕМИАЛЬНЫЙ СЕРВИС 💎</div>
+        <h1 class="display-3 fw-bold mb-3">ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ</h1>
+        <p class="lead">Подберите удобные и полезные услуги для вашего визита</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="services-categories">
+                {% for cat in categories %}
+                    <button class="category-btn {% if cat == 'all' %}active{% endif %}" data-category="{{ cat }}">
+                        {% if cat == 'all' %}Все услуги{% elif cat == 'periphery' %}Периферия{% elif cat == 'food' %}Кухня и бар{% elif cat == 'premium' %}Премиум{% else %}Турниры{% endif %}
+                    </button>
+                {% endfor %}
+            </div>
+
+            <div class="services-grid">
+                {% for card in service_cards %}
+                    <div class="service-card" data-category="{{ card.category }}">
+                        <div class="service-image">
+                            {% if card.image %}
+                                <img src="{{ card.image.url }}" alt="{{ card.name }}">
+                            {% endif %}
+                            {% if card.is_featured %}<div class="service-badge">Рекомендуем</div>{% endif %}
+                        </div>
+                        <div class="service-content">
+                            <div class="service-icon"><i class="fas {{ card.icon }}"></i></div>
+                            <div class="service-title">{{ card.name }}</div>
+                            <div class="service-desc">{{ card.description|default:'Подробности уточняйте у администратора.' }}</div>
+                            <div class="service-price">
+                                <div>
+                                    <span class="price-amount">{{ card.price }} ₽</span>
+                                    {% if card.period %}<span class="price-period">{{ card.period }}</span>{% endif %}
+                                </div>
+                                <button class="add-to-cart" data-id="{{ card.id }}" data-name="{{ card.name }}" data-price="{{ card.price }}" data-type="{{ card.category }}">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="subscription-banner">
+                <h3>💎 {{ subscription.title }} 💎</h3>
+                <p>{{ subscription.description }}</p>
+                <div class="subscription-price">{{ subscription.price }} ₽/месяц</div>
+                <button class="add-to-cart" data-id="" data-name="{{ subscription.title }}" data-price="{{ subscription.price }}" data-type="once" style="background:white;color:#dc2626;border:none;padding:12px 28px;">Оформить</button>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="cart-panel">
+                <div class="cart-header">
+                    <span>Корзина</span>
+                    <span class="cart-header-badge"><i class="fas fa-shopping-bag"></i> <span id="cartBadgeCount">0</span></span>
+                </div>
+                <div id="cartItems" class="cart-empty">Пока здесь пусто</div>
+                <div class="cart-total" id="cartTotalSection" style="display:none;">
+                    <div class="cart-total-row"><span>Количество услуг:</span><span id="cartCount">0</span></div>
+                    <div class="cart-total-row total"><span>Итого:</span><span id="cartTotal">0 ₽</span></div>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn" style="display:none;">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="payment-modal-overlay" id="paymentModalOverlay">
+    <div class="payment-modal">
+        <button class="payment-modal-close" id="paymentModalClose" aria-label="Закрыть">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="payment-modal-header">
+            <span class="section-badge">💳 ОПЛАТА</span>
+            <h3>Оформление услуги</h3>
+        </div>
+        <div class="payment-summary">
+            <div>
+                <span>Услуги</span>
+                <strong id="paymentServices">—</strong>
+            </div>
+            <div>
+                <span>К оплате</span>
+                <strong id="paymentTotal">0 ₽</strong>
+            </div>
+        </div>
+        <div class="payment-card-preview" id="paymentPreviewPanel">
+            <small id="paymentPreviewTitle">Банковская карта</small>
+            <div class="card-number mt-2" id="paymentPreviewMain">••••  4242</div>
+            <div class="d-flex justify-content-between mt-3">
+                <small id="paymentPreviewSub">CyberX Club</small>
+                <small id="paymentPreviewExtra">12/28</small>
+            </div>
+        </div>
+        <div class="payment-methods">
+            <label class="payment-method active">
+                <input type="radio" name="paymentMethod" value="card" checked>
+                <div class="payment-method-icon"><i class="fas fa-credit-card"></i></div>
+                <div class="payment-method-label">
+                    <strong>Картой</strong>
+                    <span>Visa / MasterCard</span>
+                </div>
+            </label>
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="transfer">
+                <div class="payment-method-icon"><i class="fas fa-qrcode"></i></div>
+                <div class="payment-method-label">
+                    <strong>По QR</strong>
+                    <span>Сканируйте код</span>
+                </div>
+            </label>
+            <label class="payment-method">
+                <input type="radio" name="paymentMethod" value="cash">
+                <div class="payment-method-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="payment-method-label">
+                    <strong>Наличными</strong>
+                    <span>Оплата на месте</span>
+                </div>
+            </label>
+        </div>
+        <button class="checkout-btn payment-confirm-btn" id="paymentConfirmBtn">
+            <i class="fas fa-lock"></i> Подтвердить оплату
+        </button>
+    </div>
+</div>
+
+<form id="servicesCheckoutForm" method="post">
+    {% csrf_token %}
+    <div id="selectedServiceInputs"></div>
+</form>
+
+<script>
+    let cart = [];
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const paymentModal = document.getElementById('paymentModalOverlay');
+    const paymentModalClose = document.getElementById('paymentModalClose');
+    const paymentConfirmBtn = document.getElementById('paymentConfirmBtn');
+    const servicesCheckoutForm = document.getElementById('servicesCheckoutForm');
+    const selectedServiceInputs = document.getElementById('selectedServiceInputs');
+    const paymentPreviewPanel = document.getElementById('paymentPreviewPanel');
+    const paymentPreviewTitle = document.getElementById('paymentPreviewTitle');
+    const paymentPreviewMain = document.getElementById('paymentPreviewMain');
+    const paymentPreviewSub = document.getElementById('paymentPreviewSub');
+    const paymentPreviewExtra = document.getElementById('paymentPreviewExtra');
+
+    function updateServiceInputs() {
+        selectedServiceInputs.innerHTML = '';
+        cart.forEach(item => {
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'services';
+            hidden.value = item.id;
+            selectedServiceInputs.appendChild(hidden);
+        });
+    }
+
+    function updatePaymentPreview() {
+        const selected = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+        if (selected === 'transfer') {
+            paymentPreviewPanel.classList.remove('small-preview');
+            paymentPreviewPanel.classList.add('qr-preview');
+            paymentPreviewTitle.textContent = 'QR-код для оплаты';
+            paymentPreviewMain.innerHTML = '<div class="qr-box"></div>';
+            paymentPreviewSub.textContent = 'Сканируйте для оплаты';
+            paymentPreviewExtra.textContent = 'Сразу после оплаты';
+            paymentConfirmBtn.innerHTML = '<i class="fas fa-qrcode"></i> Подтвердить оплату';
+        } else if (selected === 'cash') {
+            paymentPreviewPanel.classList.add('small-preview');
+            paymentPreviewPanel.classList.remove('qr-preview');
+            paymentPreviewTitle.textContent = 'Оплата наличными';
+            paymentPreviewMain.textContent = 'На месте';
+            paymentPreviewSub.textContent = 'Администратор подтвердит';
+            paymentPreviewExtra.textContent = 'без комиссии';
+            paymentConfirmBtn.innerHTML = '<i class="fas fa-check"></i> Подтвердить бронь';
+        } else {
+            paymentPreviewPanel.classList.remove('small-preview', 'qr-preview');
+            paymentPreviewTitle.textContent = 'Банковская карта';
+            paymentPreviewMain.textContent = '••••  4242';
+            paymentPreviewSub.textContent = 'CyberX Club';
+            paymentPreviewExtra.textContent = '12/28';
+            paymentConfirmBtn.innerHTML = '<i class="fas fa-lock"></i> Подтвердить оплату';
+        }
+    }
+
+    function fillPaymentModal() {
+        const servicesText = cart.map(item => item.name).join(', ');
+        document.getElementById('paymentServices').textContent = servicesText || '—';
+        document.getElementById('paymentTotal').textContent = `${cart.reduce((sum, item) => sum + item.price, 0)} ₽`;
+    }
+
+    function openPaymentModal() {
+        fillPaymentModal();
+        paymentModal.classList.add('open');
+    }
+
+    function closePaymentModal() {
+        paymentModal.classList.remove('open');
+    }
+
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const cat = this.dataset.category;
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'block' : 'none';
+            });
+        });
+    });
+
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (!this.dataset.id) return;
+            const existing = cart.find(item => item.id === this.dataset.id);
+            if (!existing) {
+                cart.push({id: this.dataset.id, name: this.dataset.name, price: +this.dataset.price, type: this.dataset.type});
+            }
+            updateCart();
+        });
+    });
+
+    function updateCart() {
+        const cartItems = document.getElementById('cartItems');
+        const cartTotalSection = document.getElementById('cartTotalSection');
+        const cartBadgeCount = document.getElementById('cartBadgeCount');
+
+        if (!cart.length) {
+            cartItems.className = 'cart-empty';
+            cartItems.innerHTML = 'Пока здесь пусто';
+            cartTotalSection.style.display = 'none';
+            checkoutBtn.style.display = 'none';
+            cartBadgeCount.textContent = '0';
+            return;
+        }
+
+        let total = 0;
+        cartItems.className = 'cart-items-list';
+        cartItems.innerHTML = '';
+        cart.forEach((item, index) => {
+            total += item.price;
+            cartItems.innerHTML += `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price} ₽</div>
+                    </div>
+                    <button class="cart-item-remove" data-index="${index}" aria-label="Удалить">✕</button>
+                </div>
+            `;
+        });
+        cartTotalSection.style.display = 'block';
+        checkoutBtn.style.display = 'block';
+        cartBadgeCount.textContent = cart.length;
+        document.getElementById('cartCount').textContent = cart.length;
+        document.getElementById('cartTotal').textContent = total + ' ₽';
+
+        document.querySelectorAll('.cart-item-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                cart.splice(+this.dataset.index, 1);
+                updateCart();
+            });
+        });
+    }
+
+    checkoutBtn.addEventListener('click', function() {
+        if (!cart.length) return;
+        updateServiceInputs();
+        openPaymentModal();
+    });
+
+    paymentConfirmBtn.addEventListener('click', function() {
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+        const paymentInput = document.createElement('input');
+        paymentInput.type = 'hidden';
+        paymentInput.name = 'payment_method';
+        paymentInput.value = selectedPayment;
+        servicesCheckoutForm.appendChild(paymentInput);
+        servicesCheckoutForm.submit();
+    });
+
+    paymentModalClose.addEventListener('click', closePaymentModal);
+    paymentModal.addEventListener('click', function(e) {
+        if (e.target === paymentModal) {
+            closePaymentModal();
+        }
+    });
+
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', function() {
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+            this.classList.add('active');
+            this.querySelector('input').checked = true;
+            updatePaymentPreview();
+        });
+    });
+
+    updatePaymentPreview();
+</script>
+{% endblock %}

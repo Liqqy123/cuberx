@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Авторизация - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-hero {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+        padding: 40px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .auth-card {
+        background: #1a1a1a;
+        border-radius: 20px;
+        border: 1px solid rgba(220,38,38,0.2);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .auth-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(220,38,38,0.15);
+    }
+    
+    .auth-header {
+        background: linear-gradient(135deg, #1a1a1a, #221515);
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid rgba(220,38,38,0.3);
+    }
+    
+    .auth-header h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #dc2626;
+        margin-bottom: 5px;
+    }
+    
+    .auth-header p {
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+    
+    .auth-body {
+        padding: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #ddd;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .form-label i {
+        color: #dc2626;
+        margin-right: 8px;
+    }
+    
+    .form-control-custom {
+        width: 100%;
+        padding: 12px 15px;
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #dc2626;
+        box-shadow: 0 0 5px rgba(220,38,38,0.3);
+    }
+    
+    .form-control-custom.error {
+        border-color: #ff6b6b;
+    }
+    
+    .error-text {
+        color: #ff6b6b;
+        font-size: 0.75rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .help-text {
+        color: #aaa;
+        font-size: 0.7rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .btn-auth {
+        width: 100%;
+        background: #dc2626;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+    
+    .btn-auth:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220,38,38,0.4);
+    }
+    
+    .auth-footer {
+        text-align: center;
+        padding: 20px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        color: #aaa;
+    }
+    
+    .auth-footer a {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+    
+    .auth-footer a:hover {
+        color: #ef4444;
+        text-decoration: underline;
+    }
+    
+    /* Пароль требования */
+    .password-requirements {
+        background: #0a0a0a;
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 10px;
+    }
+    
+    .password-requirements p {
+        font-size: 0.7rem;
+        margin: 5px 0;
+        color: #aaa;
+    }
+    
+    .requirement {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.7rem;
+        color: #888;
+    }
+    
+    .requirement.valid {
+        color: #4ecdc4;
+    }
+    
+    .requirement i {
+        font-size: 0.6rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-hero">
+    <div class="container">
+        <div class="section-badge">🔐 ДОБРО ПОЖАЛОВАТЬ</div>
+        <h1 class="display-4 fw-bold mb-3">АВТОРИЗАЦИЯ</h1>
+        <p class="lead">Войдите в свой аккаунт CyberX</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <i class="fas fa-gamepad fa-3x mb-2" style="color: #dc2626;"></i>
+                    <h3>ДОБРО ПОЖАЛОВАТЬ</h3>
+                    <p>Войдите в свой аккаунт</p>
+                </div>
+                
+                <div class="auth-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i> Логин
+                            </label>
+                            <input type="text" name="username" class="form-control-custom {% if form.username.errors %}error{% endif %}" 
+                                   placeholder="Введите логин" value="{{ form.username.value|default:'' }}" required>
+                            {% for error in form.username.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Введите ваш логин</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i> Пароль
+                            </label>
+                            <input type="password" name="password" class="form-control-custom {% if form.password.errors %}error{% endif %}" 
+                                   placeholder="Введите пароль" required>
+                            {% for error in form.password.errors %}
+                                <span class="error-text"><i class="fas fa-exclamation-triangle"></i> {{ error }}</span>
+                            {% endfor %}
+                            <span class="help-text">Введите ваш пароль</span>
+                        </div>
+                        
+                        <button type="submit" class="btn-auth">
+                            <i class="fas fa-sign-in-alt me-2"></i> Войти
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,402 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+    <div class="container">
+        <!-- Логотип -->
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <div class="logo-wrapper">
+            <div class="ms-3">
+                             <img src="{% static 'images/logo-small.svg' %}" alt="CuberX" height="50" class="me-3">
+                        </div>
+             
+            </div>
+        </a>
+        
+        <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Основная навигация -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <span class="nav-icon"><i class="fas fa-home"></i></span>
+                        <span class="nav-text">Главная</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hall_map' %}">
+                        <span class="nav-icon"><i class="fas fa-map"></i></span>
+                        <span class="nav-text">Карта зала</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tournaments' %}">
+                        <span class="nav-icon"><i class="fas fa-trophy"></i></span>
+                        <span class="nav-text">Турниры</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'services' %}">
+                        <span class="nav-icon"><i class="fas fa-headphones"></i></span>
+                        <span class="nav-text">Услуги</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contacts' %}">
+                        <span class="nav-icon"><i class="fas fa-envelope"></i></span>
+                        <span class="nav-text">Контакты</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Правая часть навигации -->
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link admin-link" href="/admin/">
+                                <i class="fas fa-chalkboard-user"></i>
+                                <span>Админ-панель</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <!-- User dropdown -->
+                    <li class="nav-item dropdown user-dropdown">
+                        <a class="nav-link dropdown-toggle user-avatar" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="avatar-wrapper">
+                                <div class="avatar-pulse"></div>
+                                <i class="fas fa-user-circle fa-lg"></i>
+                            </div>
+                            <span class="user-name">{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{% url 'users:profile' %}">
+                                <i class="fas fa-user"></i> Профиль
+                                <span class="dropdown-shortcut">👤</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'users:my_bookings' %}">
+                                <i class="fas fa-clock"></i> Мои брони
+                                <span class="dropdown-shortcut">📅</span>
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'users:logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item logout-btn">
+                                        <i class="fas fa-sign-out-alt"></i> Выйти
+                                        <span class="dropdown-shortcut">🚪</span>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link login-link" href="{% url 'users:login' %}">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Войти</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link register-link" href="{% url 'users:register' %}">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Регистрация</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* Основные стили навигации */
+    #mainNavbar {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 12px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+    
+    #mainNavbar.scrolled {
+        padding: 8px 0;
+        background: rgba(10, 10, 10, 0.98);
+        box-shadow: 0 4px 25px rgba(220,38,38,0.1);
+    }
+    
+    /* Логотип */
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .logo-text {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+    
+    .logo-cyber {
+        color: white;
+    }
+    
+    .logo-x {
+        color: #dc2626;
+        text-shadow: 0 0 10px rgba(220,38,38,0.5);
+    }
+    
+    /* Навигационные ссылки - одинаковые для всех */
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        margin: 0 2px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .nav-link:hover {
+        background: rgba(220,38,38,0.15);
+        color: #dc2626;
+        transform: translateY(-2px);
+    }
+    
+    .nav-link.active {
+        background: rgba(220,38,38,0.2);
+        color: #dc2626;
+    }
+    
+    .nav-icon {
+        font-size: 0.9rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .nav-link:hover .nav-icon {
+        transform: translateY(-2px);
+        color: #dc2626;
+    }
+    
+    /* Кнопки входа/регистрации/админ - ОДИНАКОВЫЙ РАЗМЕР */
+    .login-link, 
+    .register-link,
+    .admin-link {
+        padding: 8px 20px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 110px;
+        justify-content: center;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .login-link {
+        border: 1px solid #dc2626;
+        color: #dc2626;
+        background: transparent;
+    }
+    
+    .login-link:hover {
+        background: #dc2626;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .register-link {
+        background: #dc2626;
+        color: white;
+    }
+    
+    .register-link:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220,38,38,0.3);
+    }
+    
+    /* Админ ссылка - желтая */
+    .admin-link {
+        background: rgba(255,193,7,0.15);
+        color: #ffc107;
+        border: 1px solid rgba(255,193,7,0.3);
+    }
+    
+    .admin-link:hover {
+        background: rgba(255,193,7,0.25);
+        color: #ffc107;
+        transform: translateY(-2px);
+    }
+    
+    /* User dropdown */
+    .user-dropdown .user-avatar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        border-radius: 40px;
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .avatar-wrapper {
+        position: relative;
+    }
+    
+    .avatar-pulse {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 10px;
+        height: 10px;
+        background: #4ecdc4;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(0.8);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1.5);
+            opacity: 0;
+        }
+    }
+    
+    .user-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    /* Dropdown меню */
+    .dropdown-menu {
+        background: #1a1a1a;
+        border: 1px solid rgba(220,38,38,0.2);
+        border-radius: 12px;
+        margin-top: 10px;
+        padding: 8px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .dropdown-item {
+        padding: 8px 20px;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+    }
+    
+    .dropdown-item:hover {
+        background: rgba(220,38,38,0.15);
+        color: #dc2626;
+    }
+    
+    .dropdown-shortcut {
+        font-size: 0.75rem;
+        opacity: 0.5;
+    }
+    
+    .logout-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        color: #ff6b6b;
+    }
+    
+    .logout-btn:hover {
+        background: rgba(255,107,107,0.15);
+        color: #ff6b6b;
+    }
+    
+    /* Custom Toggler */
+    .custom-toggler {
+        border: 1px solid #dc2626;
+        padding: 6px 10px;
+    }
+    
+    .custom-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(220,38,38,0.3);
+        outline: none;
+    }
+    
+    /* Мобильная версия */
+    @media (max-width: 992px) {
+        .nav-link {
+            justify-content: center;
+            padding: 10px 16px;
+        }
+        
+        .login-link, 
+        .register-link,
+        .admin-link {
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        .dropdown-menu {
+            background: #1a1a1a;
+            border: none;
+        }
+    }
+    
+    /* Анимация при скролле */
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    #mainNavbar {
+        animation: slideDown 0.5s ease;
+    }
+</style>
+
+<script>
+    // Изменение навбара при скролле
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('mainNavbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+    
+    // Добавление active класса для текущей страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href !== '#' && currentPath === href) {
+                link.classList.add('active');
+            } else if (href === '/' && currentPath === '/') {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>

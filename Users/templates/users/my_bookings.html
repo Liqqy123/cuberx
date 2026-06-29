@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Мои брони - CyberX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bookings-hero {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+        padding: 60px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 50px;
+    }
+    
+    /* Статистика */
+    .booking-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    
+    .booking-stat-card {
+        background: #1a1a1a;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    
+    .booking-stat-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(220,38,38,0.3);
+    }
+    
+    .booking-stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #dc2626;
+    }
+    
+    .booking-stat-label {
+        font-size: 0.8rem;
+        color: #aaa;
+        margin-top: 5px;
+    }
+    
+    /* Сетка броней - 2 колонки */
+    .bookings-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .booking-card {
+        background: #1a1a1a;
+        border-radius: 15px;
+        padding: 20px;
+        transition: all 0.3s;
+        border-left: 4px solid;
+    }
+    
+    .booking-card:hover {
+        transform: translateY(-5px);
+        background: #222;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    
+    .booking-card.confirmed {
+        border-left-color: #4ecdc4;
+    }
+    
+    .booking-card.pending {
+        border-left-color: #ffc107;
+    }
+    
+    .booking-card.completed {
+        border-left-color: #28a745;
+    }
+    
+    .booking-card.cancelled {
+        border-left-color: #ff6b6b;
+        opacity: 0.7;
+    }
+    
+    .booking-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .booking-title {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .booking-number {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    
+    .booking-id {
+        font-size: 0.7rem;
+        color: #aaa;
+    }
+    
+    .booking-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: bold;
+    }
+    
+    .status-confirmed {
+        background: rgba(78,205,196,0.2);
+        color: #4ecdc4;
+    }
+
+    .status-paid {
+        background: rgba(34,197,94,0.18);
+        color: #22c55e;
+    }
+    
+    .status-pending {
+        background: rgba(255,193,7,0.2);
+        color: #ffc107;
+    }
+    
+    .status-completed {
+        background: rgba(40,167,69,0.2);
+        color: #28a745;
+    }
+    
+    .status-cancelled {
+        background: rgba(255,107,107,0.2);
+        color: #ff6b6b;
+    }
+    
+    .booking-details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #aaa;
+        font-size: 0.85rem;
+    }
+    
+    .detail-item i {
+        width: 18px;
+        color: #dc2626;
+    }
+    
+    .booking-services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .service-tag {
+        background: rgba(220,38,38,0.1);
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.65rem;
+        color: #dc2626;
+    }
+    
+    .booking-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .booking-total {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #dc2626;
+    }
+    
+    .booking-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-cancel {
+        background: transparent;
+        border: 1px solid #ff6b6b;
+        padding: 5px 12px;
+        border-radius: 20px;
+        color: #ff6b6b;
+        text-decoration: none;
+        font-size: 0.7rem;
+        transition: all 0.3s;
+    }
+    
+    .btn-cancel:hover {
+        background: #ff6b6b;
+        color: white;
+    }
+    
+    .btn-repeat {
+        background: transparent;
+        border: 1px solid #dc2626;
+        padding: 5px 12px;
+        border-radius: 20px;
+        color: #dc2626;
+        text-decoration: none;
+        font-size: 0.7rem;
+        transition: all 0.3s;
+    }
+    
+    .btn-repeat:hover {
+        background: #dc2626;
+        color: white;
+    }
+    
+    .empty-bookings {
+        text-align: center;
+        padding: 60px 20px;
+        background: #1a1a1a;
+        border-radius: 20px;
+        grid-column: span 2;
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        color: #dc2626;
+        margin-bottom: 20px;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 992px) {
+        .bookings-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .bookings-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .booking-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .empty-bookings {
+            grid-column: span 1;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .booking-footer {
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .booking-actions {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bookings-hero">
+    <div class="container">
+        <div class="section-badge">📅 ИСТОРИЯ БРОНИРОВАНИЙ</div>
+        <h1 class="display-4 fw-bold mb-3">МОИ БРОНИ</h1>
+        <p class="lead">Управляйте своими бронированиями компьютеров</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Статистика -->
+    <div class="booking-stats">
+        <div class="booking-stat-card">
+            <div class="booking-stat-number">{{ total_bookings }}</div>
+            <div class="booking-stat-label">Всего броней</div>
+        </div>
+        <div class="booking-stat-card">
+            <div class="booking-stat-number">{{ active_bookings }}</div>
+            <div class="booking-stat-label">Активные</div>
+        </div>
+        <div class="booking-stat-card">
+            <div class="booking-stat-number">{{ completed_bookings }}</div>
+            <div class="booking-stat-label">Завершенные</div>
+        </div>
+        <div class="booking-stat-card">
+            <div class="booking-stat-number">{{ user.profile_hours|default:0|floatformat:1 }}</div>
+            <div class="booking-stat-label">Всего часов</div>
+        </div>
+    </div>
+    
+    <!-- Сетка броней -->
+    <div class="bookings-grid">
+        {% if bookings %}
+            {% for booking in bookings %}
+            <div class="booking-card {{ booking.status }}">
+                <div class="booking-header">
+                    <div class="booking-title">
+                        <span class="booking-number">Бронь #{{ booking.id }}</span>
+                        <span class="booking-id">{{ booking.pc_name }}</span>
+                    </div>
+                    <span class="booking-status status-{{ booking.status }}">
+                        {% if booking.status == 'paid' %}💳 Оплачено
+                        {% elif booking.status == 'confirmed' %}✅ Подтверждено
+                        {% elif booking.status == 'pending' %}⏳ Ожидает
+                        {% elif booking.status == 'completed' %}✓ Завершено
+                        {% elif booking.status == 'cancelled' %}✗ Отменено
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <div class="booking-details">
+                    <div class="detail-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>{{ booking.booking_date|date:'d.m.Y' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ booking.booking_time|time:'H:i' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>{{ booking.duration }} час(ов)</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-desktop"></i>
+                        <span>{{ booking.pc_name }}</span>
+                    </div>
+                </div>
+                
+                {% if booking.services.all %}
+                <div class="booking-services">
+                    {% for service in booking.services.all %}
+                    <span class="service-tag">
+                        <i class="fas fa-plus-circle" style="font-size: 0.6rem;"></i> {{ service.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="booking-footer">
+                    <div class="booking-total">
+                        💰 {{ booking.total_price }} ₽
+                    </div>
+                    <div class="booking-actions">
+                        {% if booking.status in 'pending,confirmed,paid' %}
+                            <form method="post" action="{% url 'users:cancel_booking' booking.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-cancel">
+                                    Отменить
+                                </button>
+                            </form>
+                        {% endif %}
+                        <a href="{% url 'hall_map' %}" class="btn-repeat">
+                            Повторить
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-bookings">
+                <div class="empty-icon">
+                    <i class="fas fa-calendar-times"></i>
+                </div>
+                <h3>У вас пока нет бронирований</h3>
+                <p class="text-muted">Забронируйте компьютер и начните игру уже сегодня!</p>
+                <a href="{% url 'hall_map' %}" class="btn" style="background: #dc2626; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; display: inline-block; margin-top: 15px;">
+                    Забронировать сейчас →
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

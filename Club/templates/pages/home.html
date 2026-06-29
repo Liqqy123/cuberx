@@ -1,0 +1,2177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title|default:'CyberX - Киберспортивный клуб' }}{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    .hero-section {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        background:
+            radial-gradient(circle at 14% 16%, rgba(220,38,38,0.18), transparent 18%),
+            radial-gradient(circle at 84% 14%, rgba(255,255,255,0.06), transparent 10%),
+            linear-gradient(135deg, #030303 0%, #0b0303 42%, #180909 58%, #250b0b 100%);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .hero-section::before,
+    .hero-section::after,
+    .hero-section::marker {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: drift 7s ease-in-out infinite;
+    }
+
+    .hero-section::before {
+        width: 520px;
+        height: 520px;
+        left: -180px;
+        bottom: -260px;
+        background: radial-gradient(circle, rgba(220,38,38,0.12), transparent 67%);
+    }
+
+    .hero-section::after {
+        width: 320px;
+        height: 320px;
+        right: 4%;
+        top: 8%;
+        background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 68%);
+        animation-duration: 10s;
+    }
+
+    .hero-section::marker {
+        width: 180px;
+        height: 180px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(220,38,38,0.04), transparent 70%);
+        animation-duration: 12s;
+    }
+
+    .hero-section::selection {
+        background: rgba(220,38,38,0.45);
+        color: #fff;
+    }
+
+    .hero-section .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-section .container::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.015) 50%, transparent 100%),
+            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px) top left / 100% 18px;
+        pointer-events: none;
+        opacity: 0.2;
+        z-index: -1;
+    }
+
+    @keyframes drift {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-18px) scale(1.04); }
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: linear-gradient(90deg, rgba(220,38,38,0.2), rgba(220,38,38,0.08));
+        color: #f8c5c5;
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(220,38,38,0.25);
+        box-shadow:
+            inset 0 0 20px rgba(220,38,38,0.08),
+            0 0 18px rgba(220,38,38,0.1);
+    }
+
+    .hero-title {
+        font-size: 5rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        margin-bottom: 18px;
+        line-height: 0.9;
+        text-transform: uppercase;
+    }
+
+    .hero-title .red {
+        color: #dc2626;
+        text-shadow: 0 0 25px rgba(220,38,38,0.25);
+    }
+
+    .hero-subtitle {
+        font-size: 1.08rem;
+        color: #d4d4d4;
+        margin-bottom: 18px;
+        max-width: 620px;
+        line-height: 1.7;
+        text-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+
+    .hero-pill-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .hero-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #e5e5e5;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        letter-spacing: 0.03em;
+    }
+
+    .hero-pill i {
+        color: #dc2626;
+        font-size: 0.75rem;
+    }
+
+    .stats-row {
+        display: flex;
+        gap: 32px;
+        margin: 24px 0 28px;
+    }
+
+    .stat-item {
+        text-align: left;
+        position: relative;
+    }
+
+    .stat-item::after {
+        content: '';
+        position: absolute;
+        right: -16px;
+        top: 50%;
+        width: 1px;
+        height: 50%;
+        background: rgba(255,255,255,0.08);
+        transform: translateY(-50%);
+    }
+
+    .stat-item:last-child::after {
+        display: none;
+    }
+
+    .stat-number {
+        font-size: 1.9rem;
+        font-weight: 800;
+        color: #dc2626;
+    }
+
+    .stat-label {
+        font-size: 0.78rem;
+        color: #aaa;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary-red {
+        background: linear-gradient(90deg, #dc2626, #b91c1c);
+        border: none;
+        padding: 14px 35px;
+        border-radius: 40px;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
+        box-shadow: 0 8px 22px rgba(220,38,38,0.28);
+    }
+
+    .btn-primary-red:hover {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(220,38,38,0.38);
+        color: white;
+    }
+
+    .btn-outline-red {
+        background: transparent;
+        border: 2px solid #dc2626;
+        padding: 14px 35px;
+        border-radius: 40px;
+        font-weight: 700;
+        color: #dc2626;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-block;
+    }
+
+    .btn-outline-red:hover {
+        background: #dc2626;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .hero-note {
+        margin-top: 18px;
+        color: #9a9a9a;
+        font-size: 0.92rem;
+        max-width: 560px;
+        line-height: 1.6;
+    }
+
+    .hero-status-panel {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        max-width: 620px;
+        margin: 18px 0;
+    }
+
+    .status-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 12px 14px;
+        min-height: 82px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .status-card small {
+        color: #9a9a9a;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        margin-bottom: 6px;
+    }
+
+    .status-card strong {
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .status-live {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fca5a5;
+    }
+
+    .status-live::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #dc2626;
+        box-shadow: 0 0 0 0 rgba(220,38,38,0.6);
+        animation: pulseLive 2.2s infinite;
+    }
+
+    @keyframes pulseLive {
+        0% { box-shadow: 0 0 0 0 rgba(220,38,38,0.6); }
+        70% { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+        100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+    }
+
+    .review-slider-container {
+        max-width: 680px;
+        overflow: hidden;
+        background:
+            linear-gradient(90deg, rgba(255,255,255,0.05), rgba(220,38,38,0.06)),
+            linear-gradient(180deg, rgba(17,17,17,0.94), rgba(27,10,10,0.94));
+        border: 1px solid rgba(220,38,38,0.12);
+        border-radius: 18px;
+        padding: 14px 0;
+        margin-top: 18px;
+        position: relative;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.06),
+            0 18px 38px rgba(0,0,0,0.35);
+    }
+
+    .review-slider-container::before,
+    .review-slider-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .review-slider-container::before {
+        left: 0;
+        background: linear-gradient(90deg, #0b0b0b, transparent);
+    }
+
+    .review-slider-container::after {
+        right: 0;
+        background: linear-gradient(270deg, #0b0b0b, transparent);
+    }
+
+    .review-track {
+        display: flex;
+        width: max-content;
+        gap: 14px;
+        animation: reviewScroll 30s linear infinite;
+        will-change: transform;
+    }
+
+    .review-card {
+        width: 300px;
+        background:
+            linear-gradient(180deg, rgba(20,20,20,0.96), rgba(41,10,10,0.92)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 35%);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 14px;
+        color: #ddd;
+        flex-shrink: 0;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .review-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(220,38,38,0.22);
+    }
+
+    .review-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+
+    .review-avatar {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #dc2626, #7f1d1d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.9rem;
+        box-shadow: inset 0 0 14px rgba(255,255,255,0.08);
+    }
+
+    .review-card .stars {
+        color: #fbbf24;
+        letter-spacing: 0.18em;
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+    }
+
+    .review-card p {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        margin: 0;
+        color: #e7e7e7;
+    }
+
+    .review-author {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: #9a9a9a;
+        font-size: 0.72rem;
+    }
+
+    @keyframes reviewScroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    .hero-visual {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 560px;
+    }
+
+    .hero-graphic {
+        position: relative;
+        width: min(560px, 100%);
+        aspect-ratio: 0.92;
+        filter: drop-shadow(0 0 40px rgba(220,38,38,0.08));
+        perspective: 1200px;
+    }
+
+    .hero-graphic::before {
+        content: '';
+        position: absolute;
+        width: 82%;
+        height: 78%;
+        left: 9%;
+        top: 10%;
+        background: radial-gradient(circle, rgba(220,38,38,0.16), transparent 68%);
+        filter: blur(10px);
+        animation: pulseGlow 6s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    .graphic-panel {
+        position: absolute;
+        inset: 8% 4% 10%;
+        background:
+            linear-gradient(180deg, rgba(11,11,11,0.98), rgba(20,6,6,0.96)),
+            linear-gradient(90deg, rgba(220,38,38,0.05), transparent 28%, rgba(255,255,255,0.03));
+        border-radius: 22px;
+        border: 1px solid rgba(255,255,255,0.08);
+        overflow: hidden;
+        box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,0.04),
+            0 24px 48px rgba(0,0,0,0.46);
+        transform: rotate(-5deg);
+        animation: panelFloat 6.5s ease-in-out infinite;
+    }
+
+    .graphic-panel::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px) top left / 100% 18px,
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px) top left / 18px 100%;
+        opacity: 0.16;
+        pointer-events: none;
+    }
+
+    .graphic-panel::after {
+        content: '';
+        position: absolute;
+        right: -10%;
+        top: 12%;
+        width: 35%;
+        height: 72%;
+        background: linear-gradient(180deg, rgba(220,38,38,0.08), transparent);
+        border-radius: 999px;
+        filter: blur(8px);
+        pointer-events: none;
+    }
+
+    @keyframes panelFloat {
+        0%, 100% { transform: rotate(-5deg) translateY(0); }
+        50% { transform: rotate(-3deg) translateY(-6px); }
+    }
+
+    .graphic-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        color: #f2f2f2;
+        font-size: 0.68rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .graphic-top .panel-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #fca5a5;
+    }
+
+    .graphic-top .panel-live::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        background: #dc2626;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(220,38,38,0.45);
+        animation: pulseLive 2s infinite;
+    }
+
+    .graphic-screen {
+        position: absolute;
+        inset: 58px 18px 84px;
+        background:
+            radial-gradient(circle at 50% 18%, rgba(220,38,38,0.08), transparent 15%),
+            linear-gradient(180deg, #0f0f0f, #120707 62%, #1a0808);
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.04);
+        overflow: hidden;
+    }
+
+    .graphic-screen::before,
+    .graphic-screen::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .graphic-screen::before {
+        width: 260px;
+        height: 260px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(220,38,38,0.12), transparent 68%);
+    }
+
+    .graphic-screen::after {
+        width: 140px;
+        height: 140px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(220,38,38,0.15);
+    }
+
+    .screen-grid {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px) top left / 100% 22px,
+            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px) top left / 22px 100%;
+        opacity: 0.18;
+    }
+
+    .screen-match {
+        position: absolute;
+        top: 18%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 78%;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 12px;
+        z-index: 1;
+    }
+
+    .screen-team {
+        text-align: center;
+        color: #ececec;
+    }
+
+    .screen-team small {
+        display: block;
+        color: #8e8e8e;
+        font-size: 0.6rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .screen-team strong {
+        display: block;
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+    }
+
+    .screen-score {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        text-shadow: 0 0 18px rgba(220,38,38,0.18);
+    }
+
+    .screen-meta {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        z-index: 1;
+    }
+
+    .screen-meta div {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 10px 8px;
+        text-align: center;
+    }
+
+    .screen-meta small {
+        display: block;
+        color: #8c8c8c;
+        font-size: 0.58rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .screen-meta strong {
+        color: #f5f5f5;
+        font-size: 0.88rem;
+    }
+
+    .graphic-footer {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 16px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        z-index: 2;
+    }
+
+    .graphic-footer div {
+        background: rgba(255,255,255,0.04);
+        border-radius: 12px;
+        padding: 10px 8px;
+        text-align: center;
+    }
+
+    .graphic-footer small {
+        display: block;
+        color: #8c8c8c;
+        font-size: 0.58rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .graphic-footer strong {
+        color: #f5f5f5;
+        font-size: 0.82rem;
+    }
+
+
+    .app-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    .app-btn {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        padding: 8px 20px;
+        border-radius: 30px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .app-btn:hover {
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+    
+    /* Секция преимуществ */
+    .features-section {
+        padding: 90px 0;
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 18% 18%, rgba(220,38,38,0.06), transparent 10%),
+            radial-gradient(circle at 82% 82%, rgba(255,255,255,0.03), transparent 10%),
+            linear-gradient(180deg, #050505 0%, #0d0d0d 48%, #121212 100%);
+        border-top: 1px solid rgba(255,255,255,0.03);
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .features-section::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 78%;
+        height: 1px;
+        transform: translateX(-50%);
+        background: linear-gradient(90deg, transparent, rgba(220,38,38,0.18), transparent);
+        pointer-events: none;
+    }
+
+    .features-section::before {
+        content: '';
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        right: 5%;
+        top: 15%;
+        background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 68%);
+        pointer-events: none;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+        max-width: 760px;
+        margin: 0 auto;
+    }
+    
+    .feature-card {
+        text-align: center;
+        padding: 36px 28px;
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+            linear-gradient(90deg, rgba(220,38,38,0.03), transparent 35%);
+        border-radius: 22px;
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.24);
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(220,38,38,0.22);
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+            linear-gradient(90deg, rgba(220,38,38,0.07), transparent 35%);
+    }
+    
+    .feature-icon {
+        width: 62px;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        color: #dc2626;
+        background: rgba(220,38,38,0.08);
+        border-radius: 18px;
+        font-size: 1.6rem;
+    }
+    
+    .feature-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+    
+    .feature-desc {
+        font-size: 0.9rem;
+        color: #aaa;
+        line-height: 1.6;
+    }
+    
+    /* Секция клубов */
+    .clubs-section {
+        padding: 90px 0;
+        background:
+            radial-gradient(circle at 50% 10%, rgba(220,38,38,0.04), transparent 9%),
+            radial-gradient(circle at 50% 90%, rgba(255,255,255,0.02), transparent 12%),
+            linear-gradient(180deg, #111111 0%, #0d0d0d 52%, #131313 100%);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-top: 1px solid rgba(255,255,255,0.03);
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .clubs-section::before {
+        content: '';
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(220,38,38,0.04), transparent 70%);
+        pointer-events: none;
+    }
+    
+    .section-badge {
+        display: inline-block;
+        background: linear-gradient(90deg, rgba(220,38,38,0.18), rgba(220,38,38,0.08));
+        color: #f8c5c5;
+        padding: 7px 18px;
+        border-radius: 30px;
+        font-size: 0.72rem;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(220,38,38,0.18);
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 18px;
+        letter-spacing: 0.04em;
+    }
+    
+    .clubs-stats {
+        display: flex;
+        justify-content: center;
+        gap: 80px;
+        margin-top: 38px;
+    }
+    
+    .clubs-stat {
+        text-align: center;
+    }
+    
+    .clubs-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #dc2626;
+    }
+    
+    .clubs-label {
+        font-size: 0.9rem;
+        color: #aaa;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    
+    /* Фрашиза блок */
+    .franchise-section {
+        padding: 64px 0;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.04);
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        background:
+            radial-gradient(circle at 50% 0%, rgba(220,38,38,0.04), transparent 9%),
+            linear-gradient(180deg, #121212 0%, #0c0c0c 100%);
+    }
+    
+    .franchise-title {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .franchise-link {
+        color: #dc2626;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .franchise-link:hover {
+        color: #ef4444;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+        
+        .stats-row {
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+        }
+        
+        .app-buttons {
+            flex-wrap: wrap;
+        }
+        
+        .features-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .clubs-stats {
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="hero-badge">КИБЕРСПОРТИВНЫЙ КЛУБ</div>
+                <h1 class="hero-title">
+                    {{ hero_title|default:'CYBER' }}<span class="red">X</span>
+                </h1>
+                <p class="hero-subtitle">
+                    {{ hero_subtitle|default:'Сеть топовых киберспортивных клубов и арен в 13 странах мира — место, где собираются на матчи, стримы, турниры и комфортный вечер за игрой.' }}
+                </p>
+
+                <div class="hero-pill-row">
+                    <span class="hero-pill"><i class="fas fa-microchip"></i> RTX 4090</span>
+                    <span class="hero-pill"><i class="fas fa-headset"></i> Премиум звук</span>
+                    <span class="hero-pill"><i class="fas fa-trophy"></i> Турниры каждую неделю</span>
+                </div>
+                
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">игровых мест</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">240Hz</div>
+                        <div class="stat-label">мониторы</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">работаем</div>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <a href="{% url 'hall_map' %}" class="btn-primary-red">Забронировать место</a>
+                    <a href="#pricing" class="btn-outline-red">Цены</a>
+                </div>
+
+                <p class="hero-note">
+                    Готовы к соревновательным матчам, спокойной тренировке или уютному вечеру с друзьями — у нас найдётся формат под любой стиль игры.
+                </p>
+
+                <div class="hero-status-panel">
+                    <div class="status-card">
+                        <small>Статус клуба</small>
+                        <strong class="status-live">Открыто сейчас</strong>
+                    </div>
+                    <div class="status-card">
+                        <small>Онлайн в зале</small>
+                        <strong>28 игроков</strong>
+                    </div>
+                    <div class="status-card">
+                        <small>Рейтинг</small>
+                        <strong>4.9 / 5</strong>
+                    </div>
+                </div>
+
+                <div class="review-slider-container">
+                    <div class="review-track">
+                        {% for review in reviews %}
+                        <div class="review-card">
+                            <div class="review-head">
+                                <div class="review-avatar">{{ review.avatar }}</div>
+                                <div>
+                                    <div class="stars">★★★★★</div>
+                                    <strong style="font-size:0.78rem; color:#fff;">{{ review.author }}</strong>
+                                </div>
+                            </div>
+                            <p>{{ review.quote }}</p>
+                            <div class="review-author"><span>{{ review.game }}</span><span>{{ review.time }}</span></div>
+                        </div>
+                        {% endfor %}
+                        {% for review in reviews %}
+                        <div class="review-card">
+                            <div class="review-head">
+                                <div class="review-avatar">{{ review.avatar }}</div>
+                                <div>
+                                    <div class="stars">★★★★★</div>
+                                    <strong style="font-size:0.78rem; color:#fff;">{{ review.author }}</strong>
+                                </div>
+                            </div>
+                            <p>{{ review.quote }}</p>
+                            <div class="review-author"><span>{{ review.game }}</span><span>{{ review.time }}</span></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-5 d-none d-lg-block hero-visual">
+                <div class="hero-graphic">
+                    <div class="graphic-panel">
+                        <div class="graphic-top">
+                            <span class="panel-live">LIVE ROOM</span>
+                            <span>01:12</span>
+                        </div>
+                        <div class="graphic-screen">
+                            <div class="screen-grid"></div>
+                            <div class="screen-match">
+                                <div class="screen-team">
+                                    <small>Team Red</small>
+                                    <strong>CyberX</strong>
+                                </div>
+                                <div class="screen-score">7:4</div>
+                                <div class="screen-team">
+                                    <small>Team Blue</small>
+                                    <strong>Nova</strong>
+                                </div>
+                            </div>
+                            <div class="screen-meta">
+                                <div>
+                                    <small>Queue</small>
+                                    <strong>03 min</strong>
+                                </div>
+                                <div>
+                                    <small>Latency</small>
+                                    <strong>12ms</strong>
+                                </div>
+                                <div>
+                                    <small>Mode</small>
+                                    <strong>Ranked</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graphic-footer">
+                            <div>
+                                <small>Now</small>
+                                <strong>Valorant</strong>
+                            </div>
+                            <div>
+                                <small>Seats</small>
+                                <strong>18 / 24</strong>
+                            </div>
+                            <div>
+                                <small>Best</small>
+                                <strong>VIP-04</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Преимущества -->
+<section class="features-section">
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <div class="feature-title">МОЩНОЕ ЖЕЛЕЗО</div>
+                <div class="feature-desc">RTX 3060/4090, 5-10400F, 16-32GB RAM, 27" мониторы 144Hz</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="feature-title">ЛУЧШЕЕ КОМЬЮНИТИ</div>
+                <div class="feature-desc">Еженедельные турниры, дружеская атмосфера, свой лигей</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Сеть клубов -->
+<section class="clubs-section">
+    <div class="container">
+        <div class="section-badge">СЕТЬ КЛУБОВ</div>
+        <h2 class="section-title">ТВОЯ ИГРА НАЧИНАЕТСЯ ЗДЕСЬ</h2>
+        <p class="text-muted mb-4">Сеть топовых киберспортивных клубов и арен в 13 странах мира</p>
+        
+        <div class="clubs-stats">
+            <div class="clubs-stat">
+                <div class="clubs-number">300+</div>
+                <div class="clubs-label">игровых клубов</div>
+            </div>
+            <div class="clubs-stat">
+                <div class="clubs-number">13</div>
+                <div class="clubs-label">стран</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Игровые тарифы -->
+<section id="pricing" class="pricing-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="section-badge">ВЫБЕРИ ТАРИФ</div>
+            <h2 class="section-title">ИГРОВЫЕ ТАРИФЫ</h2>
+            <p class="section-subtitle">Подберите оптимальный вариант для комфортной игры</p>
+        </div>
+        <div class="row g-4 pricing-row">
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card featured d-flex flex-column h-100">
+                    <div class="popular-badge">🔥 ПОПУЛЯРНЫЙ</div>
+                    <div class="pricing-header">
+                        <h3>ПРЕМИУМ</h3>
+                        <div class="price">120 ₽<span>/час</span></div>
+                    </div>
+                    <div class="pricing-body flex-grow-1">
+                        <ul>
+                            <li><i class="fas fa-check"></i> RTX 4070</li>
+                            <li><i class="fas fa-check"></i> 32GB RAM</li>
+                            <li><i class="fas fa-check"></i> 27" 240Hz</li>
+                            <li><i class="fas fa-check"></i> Razer периферия</li>
+                            <li><i class="fas fa-check"></i> Премиум кресло</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer mt-auto">
+                        <a href="{% url 'hall_map' %}" class="btn-primary-custom w-100 d-block text-center">Выбрать</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card d-flex flex-column h-100">
+                    <div class="pricing-header">
+                        <h3>VIP ЛАУНЖ</h3>
+                        <div class="price">200 ₽<span>/час</span></div>
+                    </div>
+                    <div class="pricing-body flex-grow-1">
+                        <ul>
+                            <li><i class="fas fa-check"></i> RTX 4090</li>
+                            <li><i class="fas fa-check"></i> 64GB RAM</li>
+                            <li><i class="fas fa-check"></i> 32" 360Hz</li>
+                            <li><i class="fas fa-check"></i> Wooting клавиатура</li>
+                            <li><i class="fas fa-check"></i> Отдельная комната</li>
+                            <li><i class="fas fa-check"></i> Напитки в подарок</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer mt-auto">
+                        <a href="{% url 'hall_map' %}" class="btn-outline-custom w-100 d-block text-center">Выбрать</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card d-flex flex-column h-100">
+                    <div class="pricing-header">
+                        <h3>ПАКЕТ 5+1</h3>
+                        <div class="price">ЭКОНОМИЯ</div>
+                    </div>
+                    <div class="pricing-body flex-grow-1">
+                        <ul>
+                            <li><i class="fas fa-gift"></i> Покупай 5 часов</li>
+                            <li><i class="fas fa-gift"></i> 1 час в подарок</li>
+                            <li><i class="fas fa-gift"></i> Скидка 10%</li>
+                            <li><i class="fas fa-gift"></i> Бесплатный напиток</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-footer mt-auto">
+                        <a href="{% url 'hall_map' %}" class="btn-outline-custom w-100 d-block text-center">Выбрать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Турниры -->
+<section class="tournaments-section py-5">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">🏆 ЕЖЕНЕДЕЛЬНЫЕ ТУРНИРЫ 🏆</div>
+            <h2 class="section-title">КИБЕРСПОРТИВНЫЕ БИТВЫ</h2>
+            <p class="section-subtitle">Прими участие и докажи, что ты лучший!</p>
+        </div>
+        
+        <!-- Счетчик до следующего турнира -->
+        <div class="countdown-banner">
+            <div class="countdown-content">
+                <div class="countdown-text">
+                    <i class="fas fa-fire"></i> ДО СЛЕДУЮЩЕГО ТУРНИРА
+                </div>
+                <div class="countdown-timer" id="homeCountdown">
+                    <div class="countdown-block">
+                        <span class="countdown-number" id="homeDays">00</span>
+                        <span class="countdown-label">Дней</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-block">
+                        <span class="countdown-number" id="homeHours">00</span>
+                        <span class="countdown-label">Часов</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-block">
+                        <span class="countdown-number" id="homeMinutes">00</span>
+                        <span class="countdown-label">Минут</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-block">
+                        <span class="countdown-number" id="homeSeconds">00</span>
+                        <span class="countdown-label">Секунд</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if next_tournament %}
+        <!-- Главный турнир месяца -->
+        <div class="main-tournament">
+            <div class="main-tournament-inner">
+                <div class="main-tournament-badge">🏆 ГЛАВНЫЙ ТУРНИР МЕСЯЦА 🏆</div>
+                <div class="main-tournament-game">{{ next_tournament.title }}</div>
+                <div class="main-tournament-prize">{{ next_tournament.prize }} ₽</div>
+                <div class="main-tournament-date">{{ next_tournament.date|date:'d.m.Y' }} | {{ next_tournament.date|date:'H:i' }}</div>
+                <a href="{% url 'tournaments' %}" class="main-tournament-btn">Зарегистрироваться →</a>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Список турниров -->
+        <div class="tournaments-list">
+            {% for tournament in featured_tournaments %}
+            <div class="tournament-item {% if tournament.is_featured %}featured{% endif %}">
+                <div class="tournament-place">{{ tournament.get_format_display }}</div>
+                <div class="tournament-game-info">
+                    <div class="tournament-game-icon"><i class="fas fa-trophy"></i></div>
+                    <div>
+                        <div class="tournament-game-name">{{ tournament.title }}</div>
+                        <div class="tournament-format">{% if tournament.is_online %}Online{% else %}LAN{% endif %}</div>
+                    </div>
+                </div>
+                <div class="tournament-date-info">
+                    <div class="tournament-day">{{ tournament.date|date:'d' }}</div>
+                    <div class="tournament-month">{{ tournament.date|date:'M' }}</div>
+                </div>
+                <div class="tournament-prize-info">{{ tournament.prize }} ₽</div>
+                <a href="{% url 'tournaments' %}" class="tournament-action-btn {% if tournament.is_featured %}primary{% endif %}">Регистрация</a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'tournaments' %}" class="view-all-btn">Смотреть все турниры →</a>
+        </div>
+    </div>
+</section>
+<style>
+
+    /* Pricing Cards */
+.pricing-section {
+    padding: 90px 0;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(220,38,38,0.04), transparent 9%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.02), transparent 12%),
+        linear-gradient(180deg, #0a0a0a 0%, #101010 52%, #131313 100%);
+    border-top: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.pricing-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 78%;
+    height: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, rgba(220,38,38,0.18), transparent);
+    pointer-events: none;
+}
+
+.pricing-card {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+        linear-gradient(90deg, rgba(220,38,38,0.03), transparent 28%);
+    border-radius: 22px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.22);
+    position: relative;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(220,38,38,0.22);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+        linear-gradient(90deg, rgba(220,38,38,0.06), transparent 30%);
+}
+
+.pricing-card.featured {
+    background:
+        linear-gradient(180deg, rgba(30,10,10,0.96), rgba(17,17,17,0.96)),
+        linear-gradient(90deg, rgba(220,38,38,0.08), transparent 32%);
+    border: 1px solid rgba(220,38,38,0.28);
+    position: relative;
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #dc2626;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.pricing-header h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #dc2626;
+}
+
+.price span {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #aaa;
+}
+
+.pricing-body ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin: 20px 0;
+}
+
+.pricing-body li {
+    margin: 12px 0;
+    font-size: 0.85rem;
+    color: #ddd;
+}
+
+.pricing-body li i {
+    color: #9b1e1e;
+    margin-right: 10px;
+    width: 18px;
+}
+
+.pricing-footer {
+    margin-top: 20px;
+}
+
+.btn-primary-custom {
+    background: #dc2626;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: block;
+    text-align: center;
+}
+
+.btn-primary-custom:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+.btn-outline-custom {
+    background: transparent;
+    border: 2px solid #dc2626;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: #dc2626;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: block;
+    text-align: center;
+}
+
+.btn-outline-custom:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+}
+/* Countdown Banner */
+.countdown-banner {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        linear-gradient(90deg, rgba(220,38,38,0.05), transparent 36%);
+    border-radius: 18px;
+    padding: 22px 28px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 42px rgba(0,0,0,0.22);
+}
+
+.countdown-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.countdown-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.countdown-text i {
+    margin-right: 8px;
+}
+
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.countdown-block {
+    text-align: center;
+}
+
+.countdown-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.countdown-label {
+    font-size: 0.7rem;
+    color: #aaa;
+    display: block;
+}
+
+.countdown-separator {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #dc2626;
+}
+
+/* Main Tournament */
+.main-tournament {
+    background:
+        linear-gradient(180deg, rgba(30,10,10,0.96), rgba(17,17,17,0.96)),
+        linear-gradient(90deg, rgba(220,38,38,0.08), transparent 28%);
+    border-radius: 22px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(220,38,38,0.22);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 18px 42px rgba(0,0,0,0.26);
+}
+
+.main-tournament::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(220,38,38,0.1), transparent);
+    border-radius: 50%;
+}
+
+.main-tournament-inner {
+    padding: 35px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.main-tournament-badge {
+    display: inline-block;
+    background: rgba(220,38,38,0.2);
+    color: #dc2626;
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.main-tournament-game {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.main-tournament-prize {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #dc2626;
+    margin-bottom: 10px;
+}
+
+.main-tournament-date {
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.main-tournament-btn {
+    display: inline-block;
+    background: #dc2626;
+    color: white;
+    padding: 12px 35px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.main-tournament-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(220,38,38,0.4);
+}
+
+/* Tournaments List */
+.tournaments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.tournament-item {
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025)),
+        linear-gradient(90deg, rgba(220,38,38,0.02), transparent 30%);
+    border-radius: 16px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    flex-wrap: wrap;
+    gap: 15px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.tournament-item:hover {
+    transform: translateX(10px);
+    border-color: rgba(220,38,38,0.18);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+        linear-gradient(90deg, rgba(220,38,38,0.05), transparent 30%);
+}
+
+.tournament-item.featured {
+    background:
+        linear-gradient(90deg, rgba(30,10,10,0.96), rgba(17,17,17,0.96)),
+        linear-gradient(90deg, rgba(220,38,38,0.08), transparent 30%);
+    border-left: 3px solid #dc2626;
+}
+
+.tournament-place {
+    font-size: 0.8rem;
+    color: #aaa;
+    min-width: 60px;
+}
+
+.tournament-game-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 2;
+}
+
+.tournament-game-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(220,38,38,0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dc2626;
+}
+
+.tournament-game-name {
+    font-weight: bold;
+}
+
+.tournament-format {
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.tournament-date-info {
+    text-align: center;
+    min-width: 70px;
+}
+
+.tournament-day {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.tournament-month {
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.tournament-prize-info {
+    font-weight: bold;
+    color: #dc2626;
+    min-width: 80px;
+    text-align: right;
+}
+
+.tournament-action-btn {
+    background: transparent;
+    border: 1px solid #dc2626;
+    padding: 6px 20px;
+    border-radius: 25px;
+    color: #dc2626;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+}
+
+.tournament-action-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.tournament-action-btn.primary {
+    background: #dc2626;
+    color: white;
+}
+
+.tournament-action-btn.primary:hover {
+    background: #b91c1c;
+}
+
+.view-all-btn {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #dc2626;
+    padding: 12px 35px;
+    border-radius: 40px;
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+    .tournament-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tournament-game-info {
+        flex-direction: column;
+    }
+    
+    .tournament-prize-info {
+        text-align: center;
+    }
+    
+    .countdown-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .countdown-timer {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-tournament-game {
+        font-size: 1.5rem;
+    }
+    
+    .main-tournament-prize {
+        font-size: 1.8rem;
+    }
+    
+    .countdown-timer {
+        gap: 10px;
+    }
+    
+    .countdown-number {
+        font-size: 1.2rem;
+    }
+}
+
+.view-all-btn {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #dc2626;
+    padding: 12px 35px;
+    border-radius: 40px;
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .tournaments-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .tournaments-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tournament-item {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .tournament-details {
+        flex: 1 1 100%;
+        padding-left: 0;
+        text-align: center;
+    }
+    
+    .tournament-prize-small {
+        text-align: center;
+        min-width: auto;
+    }
+    
+    .tournament-register-btn {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+    /* Pricing Cards Styles */
+.pricing-card {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 30px 25px;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    height: 100%;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    background: #222;
+}
+
+.pricing-card.featured {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1515 100%);
+    border: 1px solid rgba(220,38,38,0.3);
+}
+
+.pricing-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(220,38,38,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #dc2626;
+}
+
+.pricing-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #dc2626;
+    margin-bottom: 20px;
+}
+
+.price span {
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: #aaa;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.pricing-features li {
+    margin: 10px 0;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+.pricing-features li i {
+    color: #dc2626;
+    margin-right: 8px;
+    font-size: 0.8rem;
+}
+
+.pricing-btn {
+    display: block;
+    background: transparent;
+    border: 2px solid #dc2626;
+    padding: 10px 20px;
+    border-radius: 30px;
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-top: 20px;
+}
+
+.pricing-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.pricing-btn.primary {
+    background: #dc2626;
+    color: white;
+}
+
+.pricing-btn.primary:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+.popular-tag {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #dc2626;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Tournament Cards Styles */
+.tournaments-section {
+    padding: 90px 0;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(220,38,38,0.045), transparent 10%),
+        radial-gradient(circle at 50% 100%, rgba(255,255,255,0.02), transparent 12%),
+        linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%);
+}
+
+.tournaments-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 78%;
+    height: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, rgba(220,38,38,0.18), transparent);
+    pointer-events: none;
+}
+
+.tournaments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.tournament-card {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.tournament-card:hover {
+    transform: translateY(-5px);
+    background: #222;
+}
+
+.tournament-card.featured {
+    background: linear-gradient(135deg, #1a1a1a, #221515);
+}
+
+.tournament-card.main-event {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #2a1a1a, #1a0a0a);
+    border: 1px solid rgba(220,38,38,0.3);
+}
+
+.main-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #dc2626;
+    padding: 5px 20px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.tournament-date {
+    text-align: center;
+    min-width: 90px;
+}
+
+.date-day {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #dc2626;
+    display: block;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+.tournament-info {
+    flex: 1;
+}
+
+.tournament-game {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tournament-format {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.tournament-prize {
+    font-size: 0.85rem;
+}
+
+.tournament-prize span {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.tournament-status {
+    text-align: right;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.status-badge.open {
+    background: rgba(78,205,196,0.2);
+    color: #4ecdc4;
+}
+
+.status-badge.soon {
+    background: rgba(255,193,7,0.2);
+    color: #ffc107;
+}
+
+.status-badge.hot {
+    background: rgba(220,38,38,0.2);
+    color: #dc2626;
+}
+
+.tournament-btn {
+    display: inline-block;
+    color: #dc2626;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.tournament-btn:hover {
+    color: #ef4444;
+}
+
+.tournament-btn.primary {
+    background: #dc2626;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 25px;
+}
+
+.tournament-btn.primary:hover {
+    background: #b91c1c;
+}
+
+.tournament-btn.disabled {
+    color: #666;
+    cursor: not-allowed;
+}
+
+.view-all-btn {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #dc2626;
+    padding: 12px 35px;
+    border-radius: 40px;
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+    background: #dc2626;
+    color: white;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+    .tournaments-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tournament-card.main-event {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .tournament-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tournament-status {
+        text-align: center;
+    }
+    
+    .pricing-card {
+        margin-bottom: 20px;
+    }
+}
+    .price-table-simple {
+        width: 100%;
+        margin: 15px 0;
+    }
+    
+    .price-table-simple tr {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .price-table-simple td {
+        padding: 12px 8px;
+    }
+    
+    .price-table-simple td:first-child {
+        font-weight: bold;
+        text-align: left;
+    }
+    
+    .price-table-simple td:not(:first-child) {
+        text-align: center;
+    }
+    
+    .night-special td {
+        background: rgba(220,38,38,0.1);
+        font-weight: bold;
+        border-radius: 8px;
+    }
+    
+    .section-subtitle {
+        color: #aaa;
+        margin-top: -20px;
+        margin-bottom: 40px;
+    }
+    
+    .btn-outline-red {
+        background: transparent;
+        border: 2px solid #dc2626;
+        padding: 12px;
+        border-radius: 40px;
+        font-weight: 600;
+        color: #dc2626;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: block;
+    }
+    
+    .btn-outline-red:hover {
+        background: #dc2626;
+        color: white;
+    }
+</style>
+
+<script>
+    // Счетчик до следующего турнира
+    function updateHomeCountdown() {
+        const nextTournament = new Date();
+        nextTournament.setDate(nextTournament.getDate() + 1);
+        nextTournament.setHours(19, 0, 0, 0);
+        
+        const now = new Date();
+        const diff = nextTournament - now;
+        
+        if (diff > 0) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (86400000)) / (3600000));
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            document.getElementById('homeDays').textContent = String(days).padStart(2, '0');
+            document.getElementById('homeHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('homeMinutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('homeSeconds').textContent = String(seconds).padStart(2, '0');
+        }
+    }
+    
+    updateHomeCountdown();
+    setInterval(updateHomeCountdown, 1000);
+</script>
+{% endblock %}
